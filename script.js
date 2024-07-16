@@ -1,38 +1,46 @@
-let humanScore = 0, computerScore = 0;
+let humanScore = 0, computerScore = 0
 const choices = ["rock", "paper", "scissors"];
-const maxRounds = 5;
+const maxPoints = 5;
+const choice = document.querySelector("#choice");
+const result = document.querySelector("#result");
+const points = document.querySelector("#points");
+
+
+function updateScore() {
+    points.textContent = "Human score: " + humanScore + " Computer score: " + computerScore;
+}
+
 
 function getComputerChoice() {
     return Math.floor(Math.random() * 3);
 }
 
-function getHumanChoice() {
-    while (1) {
-        let b = prompt("Choose between rock, paper or scissors").toLowerCase();
-
-        if (choices.includes(b)) {
-            return choices.indexOf(b);
-        } else {
-            console.log("Invalid input, try again")
-        }
-    }
-}
 
 function playRound(humanChoice, computerChoice) {
     if (humanChoice-1 == computerChoice || humanChoice+2 == computerChoice) {
         humanScore++;
-        console.log("You win! " + choices[humanChoice] + " beats " + choices[computerChoice]);
+        result.textContent = "You win! " + choices[humanChoice] + " beats " + choices[computerChoice];
     } else if (computerChoice-1 == humanChoice || computerChoice+2 == humanChoice) {
         computerScore++;
-        console.log("You lose! " + choices[computerChoice] + " beats " + choices[humanChoice]);
+        result.textContent = "You lose! " + choices[computerChoice] + " beats " + choices[humanChoice];
     } else {
-        console.log("Draw!")
+        result.textContent = "Draw!";
     }
 
-    console.log("Human score: " + humanScore + "\nComputer score: " + computerScore);
+    if (humanScore == 5) {
+        humanScore = 0;
+        computerScore = 0;
+        alert("You won the game!");
+    } else if (computerScore == 5) {
+        humanScore = 0;
+        computerScore = 0;
+        alert("The computer won the game!");
+    }
+
+    updateScore()
 }
 
 
-for (let thisRound = 0; thisRound < maxRounds; thisRound++) {
-    playRound(getHumanChoice(), getComputerChoice());
-}
+choice.addEventListener("click", (event) => {
+    playRound(event.target.id, getComputerChoice())
+})
